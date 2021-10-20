@@ -7,39 +7,28 @@ import {
   View,
 } from 'react-native';
 
-import AsyncStorage from '@react-native-community/async-storage';
+import fs from 'react-native-fs'
 
 const App = () => {
 
-  async function salvar(chave, texto) {
-    await AsyncStorage.setItem(chave, texto)
+  async function salvar(texto, enconding) {
+    const path = fs.DocumentDirectoryPath + '/text.txt' //caminho do arquivo, esse caminho fica dentro do diretorio do proprio app
+    await fs.writeFile(path, texto, enconding);
   }
 
-  async function pegar(chave) {
-    let cont = await AsyncStorage.getItem(chave)
-    console.log(`${chave}: `, cont)
+  async function ler(path, enconding) {
+    const caminho = fs.DocumentDirectoryPath + path //caminho do arquivo, esse caminho fica dentro do diretorio do proprio app
+    let content = await fs.readFile(caminho, enconding);
+    console.log('Arquivo: ', content)
   }
 
-  async function deletar(chave) {
-    await AsyncStorage.removeItem(chave)
-  }
-
-  async function deletarTudo() {
-    await AsyncStorage.clear()
-  }
+  fs.moveFile(path, newPath) //move o arquivo de um lugar para o outro
+  fs.copyFile(path, destinoPath) //copia o arquivo e salva em outro lugar. Caso o lugar seja o mesmo, vc pode apenas trocar o nome do arquivo
+  fs.unlink(path) //deleta arquivo
 
   useEffect(() => {
-    salvar('meuTexto', '123465 abc')
-    salvar('nome', 'Lucas Rosa')
-    pegar('meuTexto')
-    pegar('nome')
-    deletar('meuTexto')
-    pegar('meuTexto')
-    pegar('nome')
-    deletarTudo()
-    pegar('meuTexto')
-    pegar('nome')
-
+    // salvar('Texto dentro do arquivo', 'utf8')
+    ler('/text.txt', 'utf8')
   }, [])
 
   return (
